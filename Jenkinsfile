@@ -3,13 +3,13 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Vio-ss/demo7'
+                git branch: 'main', url: 'https://github.com/YuvaDaraneePrabakar/DockerSwe'
             }
         }
         stage('Docker Build') {
             steps {
                 script {
-                    bat "docker build -t worldjavaapp ."
+                    sh 'docker build -t worldjavaapp .'
                 }
             }
         }
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'docker', variable: 'dockerhub')]) {
-                        bat "docker login -u swesiva -p ${dockerhub}"
+                        sh 'docker login -u swesiva -p Success@143'
                     }
                 }
             }
@@ -25,8 +25,8 @@ pipeline {
         stage('Docker Test') {
             steps {
                 script {
-                    bat "docker tag worldjavaapp swesiva/worldjavaapp"
-                    bat "docker push swesiva/worldjavaapp:latest"
+                    sh 'docker tag worldjavaapp swesiva/worldjavaapp'
+                    sh 'docker push swesiva/worldjavaapp:latest'
                 }
             }
         }
