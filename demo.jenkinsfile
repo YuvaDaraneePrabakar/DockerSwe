@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Vio-ss/demo7'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                script {
+                    bat "docker build -t worldjavaapp ."
+                }
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker', variable: 'dockerhub')]) {
+                        bat "docker login -u swesiva -p ${dockerhub}"
+                    }
+                }
+            }
+        }
+        stage('Docker Test') {
+            steps {
+                script {
+                    bat "docker tag worldjavaapp swesiva/worldjavaapp"
+                    bat "docker push swesiva/worldjavaapp:latest"
+                }
+            }
+        }
+    }
+}
